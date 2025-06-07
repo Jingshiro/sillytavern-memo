@@ -1,9 +1,7 @@
 let docContext = document;
 if (window.parent && window.parent.document && window.parent.document !== document) {
   docContext = window.parent.document;
-  console.log('Memo Manager: 在父文档上下文中运行。');
 } else {
-  console.log('Memo Manager: 在当前文档上下文中运行。');
 }
 
 
@@ -32,7 +30,7 @@ let chatChangeListener = null; // 聊天切换事件监听器
 let messageObserver = null; // 消息观察器
 
 const state = {
-  memos: {}, // 存储所有备忘录数据，按聊天上下文分组
+  memos: {}, // 存储所有Memo数据，按聊天上下文分组
   currentView: 'list', // 'list', 'create', 'edit'
   editingMemoId: null
 };
@@ -84,7 +82,7 @@ function getMemoManagerStyles() {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 24px 16px 24px;
+            padding: 6px 20px 5px 20px;
             border-bottom: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
             flex-shrink: 0;
             background: linear-gradient(135deg, var(--SmartThemeQuoteColor, #4a9eff) 0%, transparent 100%);
@@ -96,7 +94,7 @@ function getMemoManagerStyles() {
         .${MODAL_TITLE_CLASS} {
             margin: 0;
             font-weight: 600;
-            font-size: 20px;
+            font-size: 16px;
             color: var(--SmartThemeBodyColor, #ffffff);
             letter-spacing: 0.5px;
         }
@@ -134,7 +132,7 @@ function getMemoManagerStyles() {
         }
 
         .${MODAL_FOOTER_CLASS} {
-            padding: 16px 24px 20px 24px;
+            padding: 10px 24px 14px 24px;
             border-top: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
             display: flex;
             justify-content: center;
@@ -146,7 +144,7 @@ function getMemoManagerStyles() {
         .memo-manager-button {
             background: var(--SmartThemeQuoteColor, #4a9eff);
             color: var(--SmartThemeBodyColor, #ffffff);
-            padding: 10px 20px;
+            padding: 6px 16px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
@@ -219,7 +217,7 @@ function getMemoManagerStyles() {
             border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
             border-radius: 12px;
             padding: 6px 8px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             transition: all 0.3s ease;
             animation: memoItemSlideIn 0.3s ease-out;
             position: relative;
@@ -257,8 +255,8 @@ function getMemoManagerStyles() {
         .memo-item-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 4px;
+            align-items: center;
+            margin-bottom: 1px;
             gap: 8px;
         }
 
@@ -284,7 +282,7 @@ function getMemoManagerStyles() {
         .memo-item-content {
             color: var(--SmartThemeBodyColor, rgba(255, 255, 255, 0.85));
             line-height: 1.4;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
             font-size: 12px;
             white-space: pre-line;
             word-wrap: break-word;
@@ -295,7 +293,7 @@ function getMemoManagerStyles() {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
-            margin-top: 4px;
+            margin-top: 2px;
         }
 
         .memo-action-button {
@@ -397,9 +395,9 @@ function getMemoManagerStyles() {
         .memo-chat-info {
             background: linear-gradient(135deg, var(--SmartThemeQuoteColor, rgba(74, 158, 255, 0.1)) 0%, var(--SmartThemeChatTintColor, rgba(255, 255, 255, 0.05)) 100%);
             border: 1px solid var(--SmartThemeQuoteColor, rgba(74, 158, 255, 0.2));
-            padding: 16px 20px;
+            padding: 10px 16px;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             font-size: 14px;
             color: var(--SmartThemeBodyColor, #ffffff);
             text-align: center;
@@ -429,10 +427,10 @@ function getMemoManagerStyles() {
                 border-radius: 12px;
             }
             .${MODAL_BODY_CLASS} {
-                padding: 20px 16px;
+                padding: 16px 12px;
             }
             .${MODAL_FOOTER_CLASS} {
-                padding: 12px 16px 16px 16px;
+                padding: 10px 16px 14px 16px;
                 flex-direction: column;
                 gap: 8px;
             }
@@ -444,10 +442,11 @@ function getMemoManagerStyles() {
                 padding: 6px 8px;
             }
             .memo-item-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-                margin-bottom: 4px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 1px;
             }
             .memo-item-title {
                 font-size: 13px;
@@ -456,13 +455,13 @@ function getMemoManagerStyles() {
                 align-self: flex-end;
             }
             .memo-item-content {
-                margin-bottom: 6px;
+                margin-bottom: 3px;
                 font-size: 11px;
             }
             .memo-item-actions {
                 justify-content: center;
                 gap: 8px;
-                margin-top: 4px;
+                margin-top: 2px;
             }
             .memo-action-button {
                 flex: 1;
@@ -475,8 +474,8 @@ function getMemoManagerStyles() {
         /* 段落注释按钮样式 */
         .memo-annotation-btn {
             position: absolute;
-            top: -5px;
-            right: 5px;
+            top: -10px;
+            right: -2px;
             width: 18px;
             height: 18px;
             border: none;
@@ -494,6 +493,10 @@ function getMemoManagerStyles() {
             justify-content: center;
             box-shadow: none;
             line-height: 1;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         .memo-annotation-btn:hover {
@@ -653,7 +656,7 @@ function saveMemosToStorage(context, memos) {
     const key = getStorageKey(context);
     localStorage.setItem(key, JSON.stringify(memos));
   } catch (e) {
-    console.error('Memo Manager: 保存备忘录失败:', e);
+    console.error('Memo Manager: 保存Memo失败:', e);
     toastr.error('保存失败: ' + e.message);
   }
 }
@@ -667,7 +670,7 @@ function loadMemosFromStorage(context) {
     }
     return [];
   } catch (e) {
-    console.error('Memo Manager: 加载备忘录失败:', e);
+    console.error('Memo Manager: 加载Memo失败:', e);
     return [];
   }
 }
@@ -689,7 +692,7 @@ function ensureModalStructure() {
     modalElement.innerHTML = `
             <div class="${MODAL_CLASS_NAME}">
                 <div class="${MODAL_HEADER_CLASS}">
-                    <h3 class="${MODAL_TITLE_CLASS}">备忘录管理</h3>
+                    <h3 class="${MODAL_TITLE_CLASS}">Memo管理</h3>
                     <button class="${MODAL_CLOSE_X_CLASS}">&times;</button>
                 </div>
                 <div class="${MODAL_BODY_CLASS}"></div>
@@ -788,8 +791,8 @@ function renderMemoList() {
   if (memos.length === 0) {
     html += `
             <div class="empty-memo-message">
-                <p>暂无备忘录</p>
-                <p>点击"新建备忘录"开始记录吧！</p>
+                <p>暂无Memo</p>
+                <p>点击"新建Memo"开始记录吧！</p>
             </div>
         `;
   } else {
@@ -806,7 +809,7 @@ function renderMemoList() {
       const lastEditTime = memo.updatedAt || memo.createdAt;
       const date = new Date(lastEditTime).toLocaleString('zh-CN');
       
-      // 生成备忘录项HTML
+      // 生成Memo项HTML
       html += `
                 <div class="memo-item" data-memo-id="${memo.id}">
                     <div class="memo-item-header">
@@ -836,13 +839,13 @@ function renderMemoList() {
 
   modalBodyElement.innerHTML = html;
 
-  // 绑定备忘录操作按钮事件
+  // 绑定Memo操作按钮事件
   bindMemoActionEvents();
 
   // 渲染底部按钮
   modalFooterElement.innerHTML = '';
-  modalFooterElement.appendChild(createButton('新建备忘录', 'primary', () => renderCreateMemo()));
-  modalFooterElement.appendChild(createButton('清空所有', 'danger', () => clearAllMemos()));
+  modalFooterElement.appendChild(createButton('新建Memo', 'primary', () => renderCreateMemo()));
+  modalFooterElement.appendChild(createButton('清空当前聊天', 'danger', () => clearCurrentChatMemos()));
 
   // 重新居中模态框
   requestAnimationFrame(() => {
@@ -850,9 +853,9 @@ function renderMemoList() {
   });
 }
 
-// 绑定备忘录操作按钮事件
+// 绑定Memo操作按钮事件
 function bindMemoActionEvents() {
-  // 绑定备忘录框点击事件（进入编辑模式）
+  // 绑定Memo框点击事件（进入编辑模式）
   const memoItems = modalBodyElement.querySelectorAll('.memo-item');
   memoItems.forEach(item => {
     item.addEventListener('click', (e) => {
@@ -896,7 +899,7 @@ function renderCreateMemoWithParagraph(paragraphText = '') {
   // 确保使用最新的聊天上下文
   currentChatContext = getCurrentChatContext();
 
-  modalTitleElement.textContent = paragraphText ? '为段落创建备忘录' : '新建备忘录';
+  modalTitleElement.textContent = paragraphText ? '为段落创建Memo' : '新建Memo';
 
   const html = `
         <div class="memo-form">
@@ -930,7 +933,7 @@ function renderCreateMemoWithParagraph(paragraphText = '') {
             ` : ''}
             <div class="memo-form-group">
                 <label class="memo-form-label" for="${MEMO_INPUT_ID}">内容：</label>
-                <textarea id="${MEMO_INPUT_ID}" placeholder="${paragraphText ? '请输入对此段落的注释...' : '请输入备忘录内容...'}"></textarea>
+                <textarea id="${MEMO_INPUT_ID}" placeholder="${paragraphText ? '记下你现在的想法吧...' : '请输入笔记内容...'}"></textarea>
             </div>
         </div>
     `;
@@ -971,7 +974,7 @@ function renderCreateMemoWithParagraph(paragraphText = '') {
       const contentInput = docContext.getElementById(MEMO_INPUT_ID);
       if (contentInput) contentInput.focus();
     } else {
-      // 如果是新建备忘录，聚焦到内容输入框（因为标题可选）
+      // 如果是新建Memo，聚焦到内容输入框（因为标题可选）
       const contentInput = docContext.getElementById(MEMO_INPUT_ID);
       if (contentInput) contentInput.focus();
     }
@@ -989,7 +992,7 @@ function renderEditMemo(memoId) {
   const memo = memos.find(m => m.id === memoId);
 
   if (!memo) {
-    toastr.error('备忘录不存在！');
+    toastr.error('Memo不存在！');
     renderMemoList();
     return;
   }
@@ -999,7 +1002,7 @@ function renderEditMemo(memoId) {
     memo.type = memo.originalText ? 'annotation' : 'normal';
   }
 
-  modalTitleElement.textContent = '编辑备忘录';
+  modalTitleElement.textContent = '编辑Memo';
   state.editingMemoId = memoId;
 
   const html = `
@@ -1085,7 +1088,7 @@ function saveMemo() {
   const originalText = originalTextInput ? originalTextInput.value.trim() : '';
 
   if (!content) {
-    toastr.warning('请输入备忘录内容！');
+    toastr.warning('请输入Memo内容！');
     contentInput.focus();
     return;
   }
@@ -1099,7 +1102,7 @@ function saveMemo() {
     title: title,
     content: content,
     originalText: originalText, // 保存原始段落文本
-    type: originalText ? 'annotation' : 'normal', // 标记备忘录类型
+    type: originalText ? 'annotation' : 'normal', // 标记Memo类型
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
@@ -1107,7 +1110,7 @@ function saveMemo() {
   memos.push(newMemo);
   saveMemosToStorage(currentChatContext, memos);
 
-  toastr.success(originalText ? '段落注释已保存！' : '备忘录已保存！');
+  toastr.success(originalText ? '段落Memo已保存！' : 'Memo已保存！');
   renderMemoList();
 }
 
@@ -1126,7 +1129,7 @@ function updateMemo() {
   const originalText = originalTextInput ? originalTextInput.value.trim() : '';
 
   if (!content) {
-    toastr.warning('请输入备忘录内容！');
+    toastr.warning('请输入Memo内容！');
     contentInput.focus();
     return;
   }
@@ -1145,22 +1148,22 @@ function updateMemo() {
       memos[memoIndex].originalText = originalText;
     }
     memos[memoIndex].updatedAt = new Date().toISOString();
-    // 确保旧备忘录也有type字段
+    // 确保旧Memo也有type字段
     if (!memos[memoIndex].type) {
       memos[memoIndex].type = (memos[memoIndex].originalText || originalText) ? 'annotation' : 'normal';
     }
 
     saveMemosToStorage(currentChatContext, memos);
-    toastr.success('备忘录已更新！');
+    toastr.success('Memo已更新！');
     renderMemoList();
   } else {
-    toastr.error('备忘录不存在！');
+    toastr.error('Memo不存在！');
     renderMemoList();
   }
 }
 
 function deleteMemo(memoId) {
-  if (!confirm('确定要删除这条备忘录吗？')) {
+  if (!confirm('确定要删除这条Memo吗？')) {
     return;
   }
 
@@ -1172,10 +1175,10 @@ function deleteMemo(memoId) {
   if (memoIndex !== -1) {
     memos.splice(memoIndex, 1);
     saveMemosToStorage(currentChatContext, memos);
-    toastr.success('备忘录已删除！');
+    toastr.success('Memo已删除！');
     renderMemoList();
   } else {
-    toastr.error('备忘录不存在！');
+    toastr.error('Memo不存在！');
   }
 }
 
@@ -1323,16 +1326,16 @@ function getDisplayTitle(memo) {
   
   // 没有标题时，根据类型生成
   if (memo.type === 'annotation' && memo.originalText && memo.originalText.trim()) {
-    // 原文注释：使用原文前5字
+
     const text = memo.originalText.trim();
-    return text.length > 5 ? text.substring(0, 5) + '...' : text;
+    return text.length > 8 ? text.substring(0, 8) + '...' : text;
   } else if (memo.content && memo.content.trim()) {
-    // 普通备忘录：使用内容前5字
+
     const text = memo.content.trim();
-    return text.length > 5 ? text.substring(0, 5) + '...' : text;
+    return text.length > 8 ? text.substring(0, 8) + '...' : text;
   } else {
-    // 兜底情况：如果连内容都没有，返回默认标题
-    return '无标题备忘录';
+
+    return '无标题Memo';
   }
 }
 
@@ -1351,7 +1354,7 @@ function createMemoMenuButton(retryCount = 0) {
     menuButton.id = MENU_BUTTON_ID;
     menuButton.className = 'list-group-item flex-container flexGap5 interactable';
     menuButton.setAttribute('tabindex', '0');
-    menuButton.title = '备忘录';
+    menuButton.title = 'Memo';
 
     const iconSpan = docContext.createElement('span');
     iconSpan.textContent = '✎';
@@ -1499,7 +1502,7 @@ function createAnnotationButton(paragraph, index) {
   try {
     const button = docContext.createElement('button');
     button.className = 'memo-annotation-btn';
-    button.title = '为此段落创建备忘录';
+    button.title = '为此段落创建Memo';
     button.innerHTML = '✎';
     
     // 绑定点击事件
@@ -1519,7 +1522,7 @@ function createAnnotationButton(paragraph, index) {
     paragraph.appendChild(button);
 
   } catch (error) {
-    console.error('Memo Manager: 创建注释按钮失败:', error);
+    console.error('Memo Manager: 创建按钮失败:', error);
   }
 }
 
@@ -1531,7 +1534,7 @@ function openAnnotationMemo(paragraphText) {
     // 显示模态框
     modalElement.style.display = 'block';
     
-    // 渲染创建备忘录界面，预填充段落内容
+    // 渲染创建Memo界面，预填充段落内容
     renderCreateMemoWithParagraph(paragraphText);
     
     // 监听聊天切换事件
@@ -1546,8 +1549,8 @@ function openAnnotationMemo(paragraphText) {
     });
 
   } catch (error) {
-    console.error('Memo Manager: 打开段落注释失败:', error);
-    toastr.error('打开注释功能失败，请重试');
+    console.error('Memo Manager: 打开段落Memo失败:', error);
+    toastr.error('打开Memo功能失败，请重试');
   }
 }
 
@@ -1559,7 +1562,7 @@ function stopMessageObserver() {
   }
 }
 
-// 分享备忘录功能
+// 分享Memo功能
 function shareMemo(memoId) {
   try {
     // 确保使用最新的聊天上下文
@@ -1568,7 +1571,7 @@ function shareMemo(memoId) {
     const memo = memos.find(m => m.id === memoId);
 
     if (!memo) {
-      toastr.error('备忘录不存在！');
+      toastr.error('Memo不存在！');
       return;
     }
 
@@ -1577,48 +1580,179 @@ function shareMemo(memoId) {
       return;
     }
 
-    // 显示加载提示
-    toastr.info('正在生成图片...');
-
-    // 生成图片
-    generateMemoImage(memo).then(imageDataUrl => {
-      // 显示图片预览
-      showImagePreview(imageDataUrl, memo);
-      toastr.success('图片生成成功！');
-    }).catch(error => {
-      console.error('Memo Manager: 生成图片失败:', error);
-      toastr.error('生成图片失败，请重试');
-    });
+    // 显示风格选择界面
+    showStyleSelection(memo);
 
   } catch (error) {
-    console.error('Memo Manager: 分享备忘录失败:', error);
+    console.error('Memo Manager: 分享Memo失败:', error);
     toastr.error('分享功能出错，请重试');
   }
 }
 
-// 显示图片预览
-function showImagePreview(imageDataUrl, memo) {
+// 显示风格选择界面
+function showStyleSelection(memo) {
   // 设置当前视图状态
-  state.currentView = 'preview';
+  state.currentView = 'style-selection';
   
-  modalTitleElement.textContent = '图片预览';
+  modalTitleElement.textContent = '选择图片风格';
   
   const html = `
-    <div style="text-align: center; padding: 20px 0;">
-      <div style="margin-bottom: 20px; color: var(--SmartThemeBodyColor, rgba(255, 255, 255, 0.8)); font-size: 14px;">
-        ${escapeHtml(getDisplayTitle(memo))}
+    <div style="padding: 20px 0;">
+      <div style="margin-bottom: 20px; color: var(--SmartThemeBodyColor, rgba(255, 255, 255, 0.8)); font-size: 14px; text-align: center;">
+        为"${escapeHtml(getDisplayTitle(memo))}"选择图片风格
       </div>
-      <div style="max-height: 500px; overflow: auto; border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1)); border-radius: 8px; background: #fff; padding: 10px;">
-        <img src="${imageDataUrl}" style="max-width: 100%; height: auto; border-radius: 4px;" alt="备忘录图片" />
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 20px 0;">
+        <!-- 淡雅简洁风格 -->
+        <div class="style-option" data-style="elegant" style="
+          border: 2px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+          border-radius: 12px;
+          padding: 16px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background: linear-gradient(135deg, #f8f9ff 0%, #fff5f0 100%);
+        ">
+          <div style="
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 30%, #fff0f5 70%, #fff5f0 100%);
+            position: relative;
+          ">
+            <div style="
+              position: absolute;
+              top: 8px;
+              left: 8px;
+              font-size: 10px;
+              color: #666;
+              font-family: serif;
+            ">预览</div>
+            <div style="
+              position: absolute;
+              top: 20px;
+              left: 8px;
+              right: 8px;
+              height: 2px;
+              background: #4a9eff;
+              width: 30px;
+            "></div>
+          </div>
+          <h4 style="margin: 0 0 8px 0; color: #2c3e50; font-size: 14px;">淡雅简洁</h4>
+          <p style="margin: 0; font-size: 12px; color: #666;">温暖柔和的配色</p>
+        </div>
+
+        <!-- 银黑冷酷风格 -->
+        <div class="style-option" data-style="dark" style="
+          border: 2px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+          border-radius: 12px;
+          padding: 16px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        ">
+          <div style="
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 30%, #1a1a2e 70%, #0f0f23 100%);
+            position: relative;
+          ">
+            <div style="
+              position: absolute;
+              top: 8px;
+              left: 8px;
+              font-size: 10px;
+              color: #bbb;
+              font-family: serif;
+            ">预览</div>
+            <div style="
+              position: absolute;
+              top: 20px;
+              left: 8px;
+              right: 8px;
+              height: 2px;
+              background: #00d4ff;
+              width: 30px;
+            "></div>
+          </div>
+          <h4 style="margin: 0 0 8px 0; color: #fff; font-size: 14px;">银黑冷酷</h4>
+          <p style="margin: 0; font-size: 12px; color: #bbb;">深色科技感配色</p>
+        </div>
+
+        <!-- 绿色护眼风格 -->
+        <div class="style-option" data-style="green" style="
+          border: 2px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1));
+          border-radius: 12px;
+          padding: 16px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%);
+        ">
+          <div style="
+            width: 100%;
+            height: 80px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 30%, #e6ffe6 70%, #f5fff5 100%);
+            position: relative;
+          ">
+            <div style="
+              position: absolute;
+              top: 8px;
+              left: 8px;
+              font-size: 10px;
+              color: #2d5a2d;
+              font-family: serif;
+            ">预览</div>
+            <div style="
+              position: absolute;
+              top: 20px;
+              left: 8px;
+              right: 8px;
+              height: 2px;
+              background: #28a745;
+              width: 30px;
+            "></div>
+          </div>
+          <h4 style="margin: 0 0 8px 0; color: #2d5a2d; font-size: 14px;">绿色护眼</h4>
+          <p style="margin: 0; font-size: 12px; color: #5a7a5a;">清新自然的配色</p>
+        </div>
       </div>
     </div>
+
+    <style>
+      .style-option:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        border-color: var(--SmartThemeQuoteColor, #4a9eff) !important;
+      }
+      
+      @media (max-width: 768px) {
+        .style-option {
+          grid-template-columns: 1fr !important;
+        }
+      }
+    </style>
   `;
   
   modalBodyElement.innerHTML = html;
   
+  // 绑定风格选择事件
+  const styleOptions = modalBodyElement.querySelectorAll('.style-option');
+  styleOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      const style = option.getAttribute('data-style');
+      generateImageWithStyle(memo, style);
+    });
+  });
+  
   // 渲染底部按钮
   modalFooterElement.innerHTML = '';
-  modalFooterElement.appendChild(createButton('下载图片', 'primary', () => downloadImage(imageDataUrl, memo)));
   modalFooterElement.appendChild(createButton('返回', 'secondary', () => renderMemoList()));
   
   // 重新居中模态框
@@ -1627,14 +1761,62 @@ function showImagePreview(imageDataUrl, memo) {
   });
 }
 
+// 使用指定风格生成图片
+function generateImageWithStyle(memo, style) {
+  // 显示加载提示
+  toastr.info('正在生成图片...');
+
+  // 生成图片
+  generateMemoImage(memo, style).then(imageDataUrl => {
+    // 显示图片预览
+    showImagePreview(imageDataUrl, memo, style);
+    toastr.success('图片生成成功！');
+  }).catch(error => {
+    console.error('Memo Manager: 生成图片失败:', error);
+    toastr.error('生成图片失败，请重试');
+  });
+}
+
+// 显示图片预览
+function showImagePreview(imageDataUrl, memo, style) {
+  // 设置当前视图状态
+  state.currentView = 'preview';
+  
+  modalTitleElement.textContent = '图片预览';
+  
+  const html = `
+    <div style="text-align: center; padding: 20px 0;">
+      <div style="margin-bottom: 20px; color: var(--SmartThemeBodyColor, rgba(255, 255, 255, 0.8)); font-size: 14px;">
+        ${escapeHtml(getDisplayTitle(memo))} - ${style === 'elegant' ? '淡雅简洁' : style === 'dark' ? '银黑冷酷' : '绿色护眼'}风格
+      </div>
+      <div style="max-height: 500px; overflow: auto; border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.1)); border-radius: 8px; background: #fff; padding: 10px;">
+        <img src="${imageDataUrl}" style="max-width: 100%; height: auto; border-radius: 4px;" alt="Memo图片" />
+      </div>
+    </div>
+  `;
+  
+  modalBodyElement.innerHTML = html;
+  
+  // 渲染底部按钮
+  modalFooterElement.innerHTML = '';
+  modalFooterElement.appendChild(createButton('下载图片', 'primary', () => downloadImage(imageDataUrl, memo, style)));
+  modalFooterElement.appendChild(createButton('重新选择风格', 'secondary', () => showStyleSelection(memo)));
+  modalFooterElement.appendChild(createButton('返回列表', 'secondary', () => renderMemoList()));
+  
+  // 重新居中模态框
+  requestAnimationFrame(() => {
+    centerModal();
+  });
+}
+
 // 下载图片
-function downloadImage(imageDataUrl, memo) {
+function downloadImage(imageDataUrl, memo, style) {
   try {
     // 生成更有意义的文件名
     const displayTitle = getDisplayTitle(memo);
     const safeTitle = displayTitle.replace(/[^\w\u4e00-\u9fa5]/g, '_').substring(0, 20);
     const timestamp = new Date().toISOString().slice(0, 16).replace(/[:\-]/g, '');
-    const fileName = `memo_${safeTitle}_${timestamp}.png`;
+    const fileName = `memo_${safeTitle}_${timestamp}_${style}.png`;
     
     // 创建下载链接
     const link = docContext.createElement('a');
@@ -1653,10 +1835,70 @@ function downloadImage(imageDataUrl, memo) {
   }
 }
 
-// 生成备忘录图片
-function generateMemoImage(memo) {
+// 生成Memo图片
+function generateMemoImage(memo, style = 'elegant') {
   return new Promise((resolve, reject) => {
     try {
+      // 定义主题配置
+      const themes = {
+        elegant: {
+          name: '淡雅简洁',
+          background: {
+            colors: ['#f8f9ff', '#f0f4ff', '#fff0f5', '#fff5f0'],
+            texture: { color: '#000', alpha: 0.03 }
+          },
+          colors: {
+            userInfo: '#666',
+            time: '#999',
+            title: '#2c3e50',
+            accent: '#4a9eff',
+            excerpt: '#34495e',
+            notes: '#555',
+            brand: '#999',
+            decorativeLine: '#4a9eff',
+            separatorLine: '#e0e0e0'
+          }
+        },
+        dark: {
+          name: '银黑冷酷',
+          background: {
+            colors: ['#2c3e50', '#34495e', '#1a1a2e', '#0f0f23'],
+            texture: { color: '#fff', alpha: 0.05 }
+          },
+          colors: {
+            userInfo: '#bbb',
+            time: '#999',
+            title: '#fff',
+            accent: '#00d4ff',
+            excerpt: '#e0e0e0',
+            notes: '#ccc',
+            brand: '#888',
+            decorativeLine: '#00d4ff',
+            separatorLine: '#444'
+          }
+        },
+        green: {
+          name: '绿色护眼',
+          background: {
+            colors: ['#e8f5e8', '#f0fff0', '#e6ffe6', '#f5fff5'],
+            texture: { color: '#2d5a2d', alpha: 0.03 }
+          },
+          colors: {
+            userInfo: '#2d5a2d',
+            time: '#5a7a5a',
+            title: '#1e3a1e',
+            accent: '#28a745',
+            excerpt: '#2d5a2d',
+            notes: '#3d6a3d',
+            brand: '#5a7a5a',
+            decorativeLine: '#28a745',
+            separatorLine: '#b8d8b8'
+          }
+        }
+      };
+
+      const theme = themes[style] || themes.elegant;
+      
       const canvas = docContext.createElement('canvas');
       const ctx = canvas.getContext('2d');
       
@@ -1678,10 +1920,10 @@ function generateMemoImage(memo) {
       ctx.scale(scale, scale);
       
       // 绘制背景
-      drawBackground(ctx, width, height);
+      drawBackground(ctx, width, height, theme);
       
       // 绘制内容
-      drawMemoContent(ctx, memo, width, height).then(() => {
+      drawMemoContent(ctx, memo, width, height, theme).then(() => {
         // 返回图片数据
         resolve(canvas.toDataURL('image/png', 0.9));
       }).catch(reject);
@@ -1744,33 +1986,33 @@ function calculateContentHeight(ctx, memo, width) {
 }
 
 // 绘制背景
-function drawBackground(ctx, width, height) {
+function drawBackground(ctx, width, height, theme) {
   // 创建温暖的渐变背景
   const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, '#f8f9ff');
-  gradient.addColorStop(0.3, '#f0f4ff');
-  gradient.addColorStop(0.7, '#fff0f5');
-  gradient.addColorStop(1, '#fff5f0');
+  gradient.addColorStop(0, theme.background.colors[0]);
+  gradient.addColorStop(0.3, theme.background.colors[1]);
+  gradient.addColorStop(0.7, theme.background.colors[2]);
+  gradient.addColorStop(1, theme.background.colors[3]);
   
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
   
   // 添加微妙的纹理效果
-  ctx.globalAlpha = 0.03;
+  ctx.globalAlpha = theme.background.texture.alpha;
   for (let i = 0; i < 100; i++) {
     const x = Math.random() * width;
     const y = Math.random() * height;
     const radius = Math.random() * 2;
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = theme.background.texture.color;
     ctx.fill();
   }
   ctx.globalAlpha = 1;
 }
 
-// 绘制备忘录内容
-function drawMemoContent(ctx, memo, width, height) {
+// 绘制Memo内容
+function drawMemoContent(ctx, memo, width, height, theme) {
   return new Promise((resolve) => {
     const padding = 30;
     const contentWidth = width - padding * 2;
@@ -1803,7 +2045,7 @@ function drawMemoContent(ctx, memo, width, height) {
       }
       
       ctx.font = '12px "QiushuiShotai", serif';
-      ctx.fillStyle = '#666';
+      ctx.fillStyle = theme.colors.userInfo;
       ctx.textAlign = 'left';
       ctx.fillText(`${userName} → ${charName}`, padding, currentY);
       
@@ -1816,7 +2058,7 @@ function drawMemoContent(ctx, memo, width, height) {
     // 1. 绘制时间
     const timeText = new Date(memo.updatedAt || memo.createdAt).toLocaleString('zh-CN');
     ctx.font = '12px "QiushuiShotai", serif';
-    ctx.fillStyle = '#999';
+    ctx.fillStyle = theme.colors.time;
     ctx.textAlign = 'right';
     ctx.fillText(timeText, width - padding, currentY);
     
@@ -1826,7 +2068,7 @@ function drawMemoContent(ctx, memo, width, height) {
     ctx.textAlign = 'left';
     if (memo.title && memo.title.trim()) {
       ctx.font = 'bold 20px "QiushuiShotai", serif';
-      ctx.fillStyle = '#2c3e50';
+      ctx.fillStyle = theme.colors.title;
       
       const titleLines = wrapText(ctx, memo.title.trim(), contentWidth);
       titleLines.forEach(line => {
@@ -1843,7 +2085,7 @@ function drawMemoContent(ctx, memo, width, height) {
     }
     
     // 3. 绘制装饰线
-    ctx.strokeStyle = '#4a9eff';
+    ctx.strokeStyle = theme.colors.decorativeLine;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(padding, currentY);
@@ -1855,23 +2097,23 @@ function drawMemoContent(ctx, memo, width, height) {
     // 4. 绘制原文段落（突出显示）
     // 添加"摘录"标签
     ctx.font = '14px "QiushuiShotai", serif';
-    ctx.fillStyle = '#4a9eff';
+    ctx.fillStyle = theme.colors.accent;
     ctx.fillText('摘录', padding, currentY);
     currentY += 18;
     
     ctx.font = '18px "QiushuiShotai", serif';
-    ctx.fillStyle = '#34495e';
+    ctx.fillStyle = theme.colors.excerpt;
     
     // 添加引号
     ctx.font = 'bold 24px "QiushuiShotai", serif';
-    ctx.fillStyle = '#4a9eff';
+    ctx.fillStyle = theme.colors.accent;
     ctx.fillText('"', padding, currentY);
     
     currentY += 5;
     
     // 原文内容
     ctx.font = '18px "QiushuiShotai", serif';
-    ctx.fillStyle = '#34495e';
+    ctx.fillStyle = theme.colors.excerpt;
     
     const originalLines = wrapText(ctx, memo.originalText, contentWidth - 30);
     originalLines.forEach(line => {
@@ -1886,13 +2128,13 @@ function drawMemoContent(ctx, memo, width, height) {
     
     // 结束引号
     ctx.font = 'bold 24px "QiushuiShotai", serif';
-    ctx.fillStyle = '#4a9eff';
+    ctx.fillStyle = theme.colors.accent;
     ctx.fillText('"', width - padding - 15, currentY - 24);
     
     currentY += 20;
     
     // 5. 绘制分隔线
-    ctx.strokeStyle = '#e0e0e0';
+    ctx.strokeStyle = theme.colors.separatorLine;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(padding + 15, currentY);
@@ -1904,12 +2146,12 @@ function drawMemoContent(ctx, memo, width, height) {
     // 6. 绘制注释内容
     // 添加"笔记"标签
     ctx.font = '14px "QiushuiShotai", serif';
-    ctx.fillStyle = '#4a9eff';
+    ctx.fillStyle = theme.colors.accent;
     ctx.fillText('笔记', padding, currentY);
     currentY += 15;
     
     ctx.font = '16px "QiushuiShotai", serif';
-    ctx.fillStyle = '#555';
+    ctx.fillStyle = theme.colors.notes;
     
     const contentLines = wrapText(ctx, memo.content, contentWidth);
     contentLines.forEach(line => {
@@ -1928,7 +2170,7 @@ function drawMemoContent(ctx, memo, width, height) {
     
     // 小标语
     ctx.font = '12px "QiushuiShotai", serif';
-    ctx.fillStyle = '#999';
+    ctx.fillStyle = theme.colors.brand;
     ctx.textAlign = 'center';
     ctx.fillText('- 来自酒馆Memo -', width / 2, currentY + 16);
     
@@ -1977,32 +2219,35 @@ function wrapText(ctx, text, maxWidth) {
   return lines;
 }
 
-function clearAllMemos() {
-  if (!confirm('⚠️ 警告：此操作将删除所有聊天记录中的所有备忘录数据，且无法恢复！\n\n确定要继续吗？')) {
+function clearCurrentChatMemos() {
+  if (!confirm('⚠️ 警告：此操作将删除当前聊天的所有Memo，且无法恢复！\n\n确定要继续吗？')) {
     return;
   }
 
   try {
-    // 获取所有localStorage的键
-    const keysToDelete = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith(LOCAL_STORAGE_KEY_PREFIX)) {
-        keysToDelete.push(key);
-      }
+    // 获取当前聊天上下文
+    const currentContext = getCurrentChatContext();
+    if (!currentContext) {
+      toastr.error('无法获取当前聊天信息！');
+      return;
     }
 
-    // 删除所有匹配的键
-    keysToDelete.forEach(key => {
-      localStorage.removeItem(key);
-    });
+    // 获取当前聊天的存储键
+    const storageKey = getStorageKey(currentContext);
+    
+    // 获取当前聊天的Memo数量
+    const currentMemos = loadMemosFromStorage(currentContext);
+    const memoCount = currentMemos.length;
 
-    toastr.success(`已清空所有备忘录数据！共删除了 ${keysToDelete.length} 个聊天记录的备忘录。`);
+    // 删除当前聊天的Memo数据
+    localStorage.removeItem(storageKey);
+
+    toastr.success(`已清空当前聊天的Memo！共删除了 ${memoCount} 条Memo。`);
     
     // 刷新当前显示
     renderMemoList();
   } catch (error) {
-    console.error('Memo Manager: 清空备忘录失败:', error);
+    console.error('Memo Manager: 清空当前聊天Memo失败:', error);
     toastr.error('清空操作失败，请重试！');
   }
 }
